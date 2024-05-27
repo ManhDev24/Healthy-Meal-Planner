@@ -1,0 +1,79 @@
+CREATE TABLE Users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(20),
+    password VARCHAR(255) NOT NULL,
+    role INT NOT NULL,  -- 1: Admin, 0: User
+    banned BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE WeeklyMenus (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    diet_type INT NOT NULL,  -- 0: Vegetarian, 1: Vegan, 2: Regular, 3: Special
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Recipes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    ingredients TEXT,
+    instructions TEXT,
+    weekly_menu_id INT,
+    FOREIGN KEY (weekly_menu_id) REFERENCES WeeklyMenus(id)
+);
+
+CREATE TABLE PersonalMealPlans (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    name VARCHAR(100) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
+CREATE TABLE MealPlanItems (
+    id SERIAL PRIMARY KEY,
+    meal_plan_id INT,
+    recipe_id INT,
+    day_of_week INT NOT NULL,  -- 0: Monday, 1: Tuesday, 2: Wednesday, 3: Thursday, 4: Friday, 5: Saturday
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (meal_plan_id) REFERENCES PersonalMealPlans(id),
+    FOREIGN KEY (recipe_id) REFERENCES Recipes(id)
+);
+
+CREATE TABLE Orders (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    address TEXT NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL,
+    status INT NOT NULL,  -- 0: Pending, 1: Confirmed, 2: Delivered, 3: Cancelled
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
+CREATE TABLE OrderItems (
+    id SERIAL PRIMARY KEY,
+    order_id INT,
+    recipe_id INT,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES Orders(id),
+    FOREIGN KEY (recipe_id) REFERENCES Recipes(id)
+);
+
+CREATE TABLE OrderHistory (
+    id SERIAL PRIMARY KEY,
+    order_id INT,
+    status INT NOT NULL,  -- 0: Pending, 1: Confirmed, 2: Delivered, 3: Cancelled
+    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES Orders(id)
+);
