@@ -58,7 +58,6 @@ This project aims to provide a solution for individuals living in big cities who
 
 ### Front-end
 - **Languages**: HTML, CSS, JavaScript
-- **Frameworks/Libraries**: React, Angular, or Vue.js
 
 ### Back-end
 - **Languages**: Java Servlets, JSP
