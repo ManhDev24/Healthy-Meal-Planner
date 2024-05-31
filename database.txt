@@ -5,7 +5,7 @@ CREATE TABLE Users (
     phone NVARCHAR(20),
     password NVARCHAR(255) NOT NULL,
     role INT NOT NULL,  -- 1: Admin, 0: User
-    banned BIT DEFAULT 0  -- Default value 0 represents FALSE
+    status BIT DEFAULT 0  -- Default value 0 represents FALSE (not banned)
 );
 
 CREATE TABLE WeeklyMenus (
@@ -21,7 +21,7 @@ CREATE TABLE Recipes (
     id INT PRIMARY KEY IDENTITY,
     name NVARCHAR(100) NOT NULL,
     description NVARCHAR(MAX),
-    ingredients NVARCHAR(MAX),
+    ingredients_id NVARCHAR(MAX),
     instructions NVARCHAR(MAX),
     weekly_menu_id INT,
     FOREIGN KEY (weekly_menu_id) REFERENCES WeeklyMenus(id)
@@ -76,4 +76,37 @@ CREATE TABLE OrderHistory (
     status INT NOT NULL,  -- 0: Pending, 1: Confirmed, 2: Delivered, 3: Cancelled
     changed_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES Orders(id)
+);
+
+create table Ingredients(
+    id	                INT PRIMARY KEY IDENTITY,
+    [name]		NVARCHAR(255)	NOT NULL,
+    unit		NVARCHAR(50),
+    price		MONEY,
+    total_quantity	INT,
+    category		NVARCHAR(100),
+    [description]	TEXT,
+    [status]		BIT
+);
+
+CREATE TABLE Ingredient_Images (
+    id				INT 		PRIMARY KEY IDENTITY,
+    ingredient_id	INT ,
+    [image]			IMAGE,
+	FOREIGN KEY (ingredient_id) REFERENCES Ingredients(id)
+);
+create table Meal_Img(
+	id int primary key identity,
+	meal_id INT,
+	[image] image,
+	FOREIGN KEY(meal_id) references MealPlanItems(id)
+);
+
+CREATE TABLE Recipe_Ingredients (
+    recipe_id					INT NOT NULL,
+    ingredient_id				INT NOT NULL,
+    ingredient_quantity			INT,
+    PRIMARY KEY (recipe_id, ingredient_id),
+    FOREIGN KEY (recipe_id)		REFERENCES Recipes(id),
+    FOREIGN KEY (ingredient_id) REFERENCES Ingredients(id)
 );
