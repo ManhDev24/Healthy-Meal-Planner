@@ -1,0 +1,27 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+// start header
+.navbar-nav {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .search-top {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .user-actions {
+    display: flex;
+    align-items: center;
+  }
+  .form-control{
+    padding: 30px 30px;
+  }
