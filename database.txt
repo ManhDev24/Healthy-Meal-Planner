@@ -1,105 +1,32 @@
-CREATE TABLE Users (
-    id INT PRIMARY KEY IDENTITY,
-    name NVARCHAR(100) NOT NULL,
-    email NVARCHAR(100) UNIQUE NOT NULL,
-    phone NVARCHAR(20),
-    password NVARCHAR(255) NOT NULL,
-    role INT NOT NULL,  -- 1: Admin, 0: User
-    status BIT DEFAULT 0  -- Default value 0 represents FALSE (not banned)
-);
-
-CREATE TABLE WeeklyMenus (
-    id INT PRIMARY KEY IDENTITY,
-    name NVARCHAR(100) NOT NULL,
-    description NVARCHAR(MAX),
-    diet_type INT NOT NULL,  -- 0: Vegetarian, 1: Vegan, 2: Regular, 3: Special
-    created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME2 DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE Recipes (
-    id INT PRIMARY KEY IDENTITY,
-    name NVARCHAR(100) NOT NULL,
-    description NVARCHAR(MAX),
-    ingredients_id NVARCHAR(MAX),
-    instructions NVARCHAR(MAX),
-    weekly_menu_id INT,
-    FOREIGN KEY (weekly_menu_id) REFERENCES WeeklyMenus(id)
-);
-
-CREATE TABLE PersonalMealPlans (
-    id INT PRIMARY KEY IDENTITY,
-    user_id INT,
-    name NVARCHAR(100) NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
-);
-
-CREATE TABLE MealPlanItems (
-    id INT PRIMARY KEY IDENTITY,
-    meal_plan_id INT,
-    recipe_id INT,
-    day_of_week INT NOT NULL,  -- 0: Monday, 1: Tuesday, 2: Wednesday, 3: Thursday, 4: Friday, 5: Saturday
-    created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (meal_plan_id) REFERENCES PersonalMealPlans(id),
-    FOREIGN KEY (recipe_id) REFERENCES Recipes(id)
-);
-
-CREATE TABLE Orders (
-    id INT PRIMARY KEY IDENTITY,
-    user_id INT,
-    address NVARCHAR(MAX) NOT NULL,
-    total_price DECIMAL(10, 2) NOT NULL,
-    status INT NOT NULL,  -- 0: Pending, 1: Confirmed, 2: Delivered, 3: Cancelled
-    created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
-);
-
-CREATE TABLE OrderItems (
-    id INT PRIMARY KEY IDENTITY,
-    order_id INT,
-    recipe_id INT,
-    quantity INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES Orders(id),
-    FOREIGN KEY (recipe_id) REFERENCES Recipes(id)
-);
-
-CREATE TABLE OrderHistory (
-    id INT PRIMARY KEY IDENTITY,
-    order_id INT,
-    status INT NOT NULL,  -- 0: Pending, 1: Confirmed, 2: Delivered, 3: Cancelled
-    changed_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES Orders(id)
-);
-
-create table Ingredients(
-    id	                INT PRIMARY KEY IDENTITY,
-    [name]		NVARCHAR(255)	NOT NULL,
-    unit		NVARCHAR(50),
-    price		MONEY,
+CREATE TABLE Ingredients (
+    id				INT 		PRIMARY KEY IDENTITY,
+    [name]			NVARCHAR(255)		NOT NULL,
+    unit			NVARCHAR(50),
+    price			MONEY,
     total_quantity	INT,
     category		NVARCHAR(100),
-    [description]	TEXT,
-    [status]		BIT
+	[description]	TEXT,
+    [status]		BIT,
+	imageurl		Nvarchar(255)
 );
 
-CREATE TABLE Ingredient_Images (
-    id				INT 		PRIMARY KEY IDENTITY,
-    ingredient_id	INT ,
-    [image]			IMAGE,
-	FOREIGN KEY (ingredient_id) REFERENCES Ingredients(id)
+
+CREATE TABLE Dishes (
+    id				INT  PRIMARY KEY IDENTITY,
+    [name]			NVARCHAR(255),
+    price			MONEY,
+    [status]		BIT,
+    [description]	TEXT,
+	imageurl		Nvarchar(255)
 );
-create table Meal_Img(
-	id int primary key identity,
-	meal_id INT,
-	[image] image,
-	FOREIGN KEY(meal_id) references MealPlanItems(id)
+
+
+
+CREATE TABLE Dish_Recipe (
+    id			INT	PRIMARY KEY IDENTITY,
+    dish_id		INT	NOT NULL,
+    [status]	BIT,
+    FOREIGN KEY (dish_id) REFERENCES Dishes(id)
 );
 
 CREATE TABLE Recipe_Ingredients (
@@ -107,6 +34,89 @@ CREATE TABLE Recipe_Ingredients (
     ingredient_id				INT NOT NULL,
     ingredient_quantity			INT,
     PRIMARY KEY (recipe_id, ingredient_id),
-    FOREIGN KEY (recipe_id)		REFERENCES Recipes(id),
+    FOREIGN KEY (recipe_id)		REFERENCES Dish_Recipe(id),
     FOREIGN KEY (ingredient_id) REFERENCES Ingredients(id)
+);
+
+CREATE TABLE Country (
+    id							INT PRIMARY KEY IDENTITY,
+    [name]						NVARCHAR(100)
+);
+CREATE TABLE City (
+    id							INT PRIMARY KEY IDENTITY,
+    [name]						NVARCHAR(100),
+    country_id					INT,
+    FOREIGN KEY (country_id)	REFERENCES Country(id)
+);
+
+CREATE TABLE Accounts (
+    id				INT PRIMARY KEY IDENTITY,
+    username		NVARCHAR(255) NOT NULL,
+    [password]		NVARCHAR(MAX) NOT NULL,
+    full_name		NVARCHAR(255) NOT NULL,
+    phone			NVARCHAR(20),
+    [address]		NVARCHAR(255),
+    city_id			INT,
+    district_id		INT,
+    country_id		INT,
+    [role]			BIT NOT NULL DEFAULT 1, --1 customer,0 admin
+    [status]		BIT NOT NULL DEFAULT 1, --1 not banned
+    
+);
+
+CREATE TABLE Orders (
+    id					INT PRIMARY KEY IDENTITY,
+    account_id			INT,
+    order_date			DATETIME,
+    ship_date			DATETIME,
+    ship_address		NVARCHAR(255),
+    ship_city_id		INT,
+    ship_district_id	INT,
+    total_price			MONEY,
+    customer_notes		TEXT,
+    [status]			BIT NOT NULL DEFAULT 1,
+	FOREIGN KEY (account_id) REFERENCES Accounts(id) 
+);
+
+CREATE TABLE Order_Details (
+    order_id				INT NOT NULL,
+    dish_id					INT NOT NULL,
+    item_type				BIT NOT NULL DEFAULT 1,
+    quantity				INT,
+	price_per_unit			MONEY,
+    PRIMARY KEY (order_id, dish_id),
+    FOREIGN KEY (order_id)	REFERENCES Orders(id),
+    FOREIGN KEY (dish_id)	REFERENCES Dishes(id)
+);
+--CREATE TABLE Shopping_Cart (
+    --account_id							INT,
+    --dish_id								INT,
+    --quantity							INT,
+    --[status]							BIT DEFAULT 1,
+    --created_date						DATETIME,
+	--PRIMARY KEY (account_id, dish_id),
+    --FOREIGN KEY (account_id)			REFERENCES Accounts(id),
+    --FOREIGN KEY (dish_id)				REFERENCES Dishes(id)
+--);
+CREATE TABLE Menu (
+    id								INT PRIMARY KEY IDENTITY,
+    [name]							NVARCHAR(255),
+    create_account					INT,
+    [period]						INT CHECK ([period] IN (1,2,3)),
+    day_of_week						INT CHECK (day_of_week IN (2,3,4,5,6,7)),
+    dish_id							INT,
+	[description]					TEXT,
+	[status]						BIT DEFAULT 1	
+    FOREIGN KEY (create_account)	REFERENCES Accounts(id),
+    FOREIGN KEY (dish_id)			REFERENCES Dishes(id)
+);
+CREATE TABLE Customer_Plan (
+    id							INT PRIMARY KEY,
+    account_id					INT,
+    [period]					TINYINT CHECK ([period] IN (1,2,3)),
+    day_of_week					TINYINT CHECK (day_of_week IN (2,3,4,5,6,7)),
+    dish_id						INT,
+    ordinal_number				INT,
+    FOREIGN KEY (account_id)	REFERENCES Accounts(id),
+    FOREIGN KEY (dish_id)		REFERENCES Dishes(id)
 );
