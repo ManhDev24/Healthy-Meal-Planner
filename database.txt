@@ -120,3 +120,5 @@ CREATE TABLE Customer_Plan (
     FOREIGN KEY (account_id)	REFERENCES Accounts(id),
     FOREIGN KEY (dish_id)		REFERENCES Dishes(id)
 );
+  
+create database FoodMarket
