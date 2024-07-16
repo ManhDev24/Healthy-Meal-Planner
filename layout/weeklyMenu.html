@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Healthy Meal Menu</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .menu-container {
+        display: flex;
+        justify-content: space-between;
+      }
+      .menu {
+        flex: 1;
+        margin-right: 20px;
+      }
+      .menu h2 {
+        border-bottom: 1px solid #ccc;
+      }
+      .menu ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      .menu li {
+        margin-bottom: 20px;
+      }
+      .menu li img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+      .weekly-menu {
+        flex: 1;
+      }
+      .weekly-menu table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .weekly-menu th,
+      .weekly-menu td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      .weekly-menu th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Healthy Meal Menu</h1>
+    <div class="menu-container">
+      <div class="menu">
+        <h2>Menu</h2>
+        <ul>
+          <!-- Menu items will be dynamically inserted here -->
+        </ul>
+      </div>
+      <div class="weekly-menu">
+        <h2>Weekly Menu</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Dish</th>
+              <th>Price</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Weekly menu items will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

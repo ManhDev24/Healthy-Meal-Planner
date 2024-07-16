@@ -1,0 +1,95 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.montserrat-font {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+
+.about-us-header,
+.contact-header,
+.price-match-policy-header,
+.shipping-policy-header {
+  background-image: url(../asset/img/contact-header.png);
+}
+
+.pages-header a {
+  color: #fff;
+}
+.pages-header h1 {
+  font-weight: 700;
+  color: white;
+}
+
+p {
+  font-size: 14px;
+  font-weight: 400;
+}
+.page-container {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.pages-header {
+  padding: 20px 0;
+  width: 100%;
+  color: #fff;
+  min-height: 200px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.container,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl,
+.container-xxl {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.page-container .page-content h2 {
+  color: #6dcb55;
+  font-size: 30px;
+}
+.page-container .page-content h3 {
+  color: #39634b;
+}
+.page-container .page-content h4 {
+  margin-top: 30px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.page-container .page-content p {
+  color: #575757;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.page-container .page-content a {
+  text-decoration: underline;
+  color: #258b30;
+}
+
+.page-container .page-content h2 {
+  color: #6dcb55;
+}
+
+.page-container .page-content h3 {
+  color: #39634b;
+}
+
+.page-container .page-content h4 {
+  margin-top: 30px;
+  font-size: 20px;
+  font-weight: 500;
+}
+body {
+  font-family: montserrat-font, sans-serif;
+  transition: 0.3s all;
+  background: #fff !important;
+}

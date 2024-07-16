@@ -22,7 +22,7 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-
+  
     <!-- Custom CSS -->
     <link rel="stylesheet" href="./asset/header.css" />
 
@@ -33,6 +33,20 @@
     <style>
       .container {
         max-width: 1300px;
+      }
+
+      .item {
+        margin: 10px; /* Add margin between items */
+      }
+
+      .card {
+        border-radius: 15px; /* Add border radius to the cards */
+        overflow: hidden; /* Ensure the border radius is applied to the images */
+      }
+
+      .card img {
+        border-top-left-radius: 15px; /* Match card's border radius */
+        border-top-right-radius: 15px; /* Match card's border radius */
       }
     </style>
   </head>
@@ -172,7 +186,7 @@
     <script>
       $('.owl-carousel').owlCarousel({
         loop: true,
-        margin: 10,
+        margin: 310,
         nav: true,
         autoplay: false,
         autoplayTimeout: 1000,
